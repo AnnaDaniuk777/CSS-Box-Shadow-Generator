@@ -1,0 +1,25 @@
+/* GLOBAL */
+@import "./common/variables.scss";
+@import "./common/mixins.scss";
+@import "./common/fonts.scss";
+@import "./common/global.scss";
+
+/* BLOCKS */
+@import "./blocks/header.scss";
+@import "./blocks/cart.scss";
+@import "./blocks/pagination.scss";
+@import "./blocks/card.scss";
+@import "./blocks/shipping.scss";
+@import "./blocks/button.scss";
+@import "./blocks/total.scss";
+@import "./blocks/slider.scss";
+@import "./blocks/container.scss";
+@import "./blocks/logo.scss";
+@import "./blocks/main-nav.scss";
+@import "./blocks/site-list.scss";
+@import "./blocks/user-list.scss";
+@import "./blocks/footer.scss";
+@import "./blocks/contacts.scss";
+@import "./blocks/payment.scss";
+@import "./blocks/mobile-menu.scss";
+@import "./blocks/overlay.scss";

@@ -1,0 +1,54 @@
+@mixin font-face($font-family, $font-weight, $font-style, $font-src) {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $font-weight;
+    font-style: $font-style;
+    font-display: swap;
+    src: $font-src;
+  }
+}
+
+@mixin reset {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin body-flex {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@mixin pseudo($display: block, $pos: absolute, $content: "") {
+  content: $content;
+  display: $display;
+  position: $pos;
+}
+
+@mixin transform {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@function z($name) {
+  @if index($z-indexes, $name) {
+   @return (length($z-indexes) - index($z-indexes, $name)) + 100;
+  } @else {
+   @warn "There is no item "#{$name}" in this list; choose one of: #{$z-indexes}";
+   @return null;
+  }
+}
+
+$z-indexes: (
+  "mobile-menu",
+  "cart-overlay",
+  "header",
+);
