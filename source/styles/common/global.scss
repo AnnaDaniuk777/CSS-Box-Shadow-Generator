@@ -6,12 +6,14 @@
 
 body {
   @include body-flex;
+  justify-content: center;
+  align-items: center;
   font-family: $font-primary;
   font-size: 18px;
   line-height: 30px;
   font-weight: 400;
-  color: $primary-color;
-  background-color: $basic-background;
+  color: $color;
+  background-color: $background-color-main;
   margin: 0;
   position: relative;
 }
@@ -41,4 +43,18 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }

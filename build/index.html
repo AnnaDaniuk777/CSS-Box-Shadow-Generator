@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="CSS Box Shadow Generator">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="./favicons/180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="./favicons/192.png">
-  <link rel="icon" href="./favicons/icon.png">
-  <link rel="icon" href="../favicon.ico">
-  <link rel="manifest" href="../manifest-webmanifest.json">
-  <link rel="stylesheet" href="/build/styles/styles.css">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="favicons/180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicons/192.png">
+  <link rel="icon" href="favicons/icon.png">
+  <link rel="icon" href="favicon.ico">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles/styles.css">
   <title>CSS Box Shadow Generator</title>
 </head>
 
@@ -18,136 +18,123 @@
   <main class="generator">
     <div class="generator__container container">
       <div class="generator__input">
-        <div class="generator__title-wrapper">
-          <h1 class="generator__title">CSS Box Shadow Generator</h1>
-          <button class="generator__refresh-button button" type="button">
-            <span class="visually-hidden">Refresh result</span>
-          </button>
-        </div>
-
         <div class="generator__result-wrapper">
-
           <div class="generator__input-result">
-
-            <div class="generator__size-wrapper">
-
-              <div class="generator__input-size">
-                <label class="generator__label" for="horizontal">Horizontal Length</label>
-                <div class="generator__input-wrapper">
-                  <input class="generator__input-number" name="number" type="number" id="horizontal" value="5">
-                  <span class="generator__input-text">px</span>
-                </div>
-                <label class="visually-hidden" for="h-length"></label>
-                <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="h-length" value="5">
-              </div>
-
-              <div class="generator__input-size">
-                <label class="generator__label" for="vertical">Vertical Length</label>
-                <div class="generator__input-wrapper">
-                  <input class="generator__input-number" name="number" type="number" id="vertical" value="5">
-                  <span class="generator__input-text">px</span>
-                </div>
-                <label class="visually-hidden" for="v-length"></label>
-                <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="v-length" value="5">
-              </div>
-
-              <div class="generator__input-size">
-                <label class="generator__label" for="blur">Blur Radius</label>
-                <div class="generator__input-wrapper">
-                  <input class="generator__input-number" name="number" type="number" id="blur" value="75">
-                  <span class="generator__input-text">px</span>
-                </div>
-                <label class="visually-hidden" for="blur-radius"></label>
-                <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="blur-radius" value="75">
-              </div>
-
-              <div class="generator__input-size">
-                <label class="generator__label" for="spread">Spread Radius</label>
-                <div class="generator__input-wrapper">
-                  <input class="generator__input-number" name="number" type="number" id="spread" value="0">
-                  <span class="generator__input-text">px</span>
-                </div>
-                <label class="visually-hidden" for="spread-radius"></label>
-                <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="spread-radius" value="0">
-              </div>
-
+            <div class="generator__title-wrapper">
+              <h1 class="generator__title">CSS Box<br>Shadow<br>Generator</h1>
+              <button class="generator__refresh-button button" type="button">
+                <span class="visually-hidden">Refresh result</span>
+              </button>
             </div>
-
-            <div class="generator__color-wrapper">
-
-              <div class="generator__input-color">
-                <label class="generator__label" for="shadow">Shadow Color</label>
-                <input class="generator__color-picker" name="color" type="color" id="shadow">
-                <label class="visually-hidden" for="shadow-color"></label>
-                <input class="generator__color-result" name="text" type="text" id="shadow-color" value="#000000">
-              </div>
-
-              <div class="generator__input-color">
-                <label class="generator__label" for="background">Background</label>
-                <input class="generator__color-picker" name="color" type="color" id="background">
-                <label class="visually-hidden" for="background-color"></label>
-                <input class="generator__color-result" name="text" type="text" id="background-color" value="#ffffff">
-              </div>
-
-              <div class="generator__input-color">
-                <label class="generator__label" for="box">Box Color</label>
-                <input class="generator__color-picker" name="color" type="color" id="box">
-                <label class="visually-hidden" for="box-color"></label>
-                <input class="generator__color-result" name="text" type="text" id="box-color" value="#f3a712">
-              </div>
-
-              <div class="generator__input-color">
-                <label class="generator__label" for="opacity">Opacity</label>
-                <div class="generator__input-wrapper">
-                  <input class="generator__input-number" name="number" type="number" id="opacity" value="0.30">
+            <div class="generator__general-wrapper">
+              <div class="generator__size-wrapper">
+                <div class="generator__input-size">
+                  <div class="generator__input-wrapper">
+                    <label class="generator__label" for="horizontal">Horizontal Length</label>
+                    <input class="generator__input-number input" name="number" type="number" id="horizontal" value="5">
+                    <span class="generator__input-text">px</span>
+                  </div>
+                  <label class="visually-hidden" for="h-length"></label>
+                  <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="h-length" value="5">
                 </div>
-                <label class="visually-hidden" for="opacity-range"></label>
-                <input class="generator__range" name="range" type="range" step="0.10" min="0" max="1" id="opacity-range" value="0.30">
+                <div class="generator__input-size">
+                  <div class="generator__input-wrapper">
+                    <label class="generator__label" for="vertical">Vertical Length</label>
+                    <input class="generator__input-number input" name="number" type="number" id="vertical" value="5">
+                    <span class="generator__input-text">px</span>
+                  </div>
+                  <label class="visually-hidden" for="v-length"></label>
+                  <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="v-length" value="5">
+                </div>
+                <div class="generator__input-size">
+                  <div class="generator__input-wrapper">
+                    <label class="generator__label" for="blur">Blur Radius</label>
+                    <input class="generator__input-number input" name="number" type="number" id="blur" value="75">
+                    <span class="generator__input-text">px</span>
+                  </div>
+                  <label class="visually-hidden" for="blur-radius"></label>
+                  <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="blur-radius" value="75">
+                </div>
+                <div class="generator__input-size">
+                  <div class="generator__input-wrapper">
+                    <label class="generator__label" for="spread">Spread Radius</label>
+                    <input class="generator__input-number input" name="number" type="number" id="spread" value="0">
+                    <span class="generator__input-text">px</span>
+                  </div>
+                  <label class="visually-hidden" for="spread-radius"></label>
+                  <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="spread-radius" value="0">
+                </div>
               </div>
-
-              <div class="generator__input-color">
-                <label class="generator__label" for="toggle">
-                  Outline
-                  <input class="generator__input-toggle" name="toggle" type="checkbox" id="toggle">
-                  <span class="generator__slider"></span>
-                  Inset
-                </label>
+              <div class="generator__color-wrapper">
+                <div class="generator__input-color">
+                  <label class="generator__label" for="shadow">Shadow Color</label>
+                  <div class="generator__general-color-wrapper">
+                    <input class="generator__color-picker" name="color" type="color" id="shadow">
+                    <label class="visually-hidden" for="shadow-color"></label>
+                    <input class="generator__color-result input" name="text" type="text" id="shadow-color" value="#000000">
+                  </div>
+                </div>
+                <div class="generator__input-color">
+                  <label class="generator__label" for="background">Background</label>
+                  <div class="generator__general-color-wrapper">
+                    <input class="generator__color-picker" name="color" type="color" id="background">
+                    <label class="visually-hidden" for="background-color"></label>
+                    <input class="generator__color-result input" name="text" type="text" id="background-color" value="#ffffff">
+                  </div>
+                </div>
+                <div class="generator__input-color">
+                  <label class="generator__label" for="box">Box Color</label>
+                  <div class="generator__general-color-wrapper">
+                    <input class="generator__color-picker" name="color" type="color" id="box">
+                    <label class="visually-hidden" for="box-color"></label>
+                    <input class="generator__color-result input" name="text" type="text" id="box-color" value="#f3a712">
+                  </div>
+                </div>
+                <div class="generator__input-size">
+                  <div class="generator__input-wrapper">
+                    <label class="generator__label" for="opacity">Opacity</label>
+                    <input class="generator__input-number input" name="number" type="number" id="opacity" value="0.30">
+                  </div>
+                  <label class="visually-hidden" for="opacity-range"></label>
+                  <input class="generator__range" name="range" type="range" step="0.10" min="0" max="1" id="opacity-range" value="0.30">
+                </div>
+                <div class="generator__input-color">
+                  <label class="generator__label" for="toggle">
+                    Outline
+                    <input class="visually-hidden" name="toggle" type="checkbox" id="toggle">
+                    <span class="generator__slider"></span>
+                    Inset
+                  </label>
+                </div>
               </div>
-
             </div>
-
+            <button class="generator__get-button button" type="button">Get Code</button>
           </div>
-
           <div class="generator__shadow-box">
             <div class="generator__box-view"></div>
           </div>
-
           <div class="generator__code-preview hidden">
+            <button class="generator__close-button button" type="button">
+              <span class="visually-hidden">Close</span>
+            </button>
             <div class="generator__content">
-              <button class="generator__close-button button" type="button">
-                <span class="visually-hidden">Close</span>
-              </button>
               <h2 class="generator__content-title">CSS</h2>
               <button class="generator__copy-button button" type="button">
                 <span class="generator__copy-button-text">Copy to Clipboard</span>
               </button>
               <pre class="generator__code-content">
-                <code>
-                  .box {
-                    background: #F3A712;
-                    box-shadow: 5px 5px 75px 0px rgba(0, 0, 0, 0.30);
-                  }
-                </code>
+      .box {
+        background: #F3A712;
+        box-shadow: 5px 5px 75px 0px rgba(0, 0, 0, 0.30);
+      }
               </pre>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   </main>
-  <script type="module" src="./scripts/main.js"></script>
+  <!-- <script type="module" src="./scripts/main.js"></script> -->
 </body>
 
 </html>
