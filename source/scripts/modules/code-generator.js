@@ -1,12 +1,12 @@
 import { hexToRgba } from './color-converter.js';
 
 export function generateCSSCode (horizontal, vertical, blur, spread, shadowColor, boxColor, opacity, shadowType) {
-  const shadowColorWithOpacity = hexToRgba(shadowColor, opacity / 100);
+  const shadowColorWithOpacity = hexToRgba(shadowColor, opacity);
 
   const shadowValue = `${horizontal}px ${vertical}px ${blur}px ${spread}px ${shadowColorWithOpacity}
-  ${shadowType === 'inset' ? 'inset' : 'outline'}`;
+  ${shadowType === 'inset' ? 'inset' : ''}`;
 
-  const cssCode = `.element {
+  const cssCode = `.box {
     background: ${boxColor};
     box-shadow: ${shadowValue};
   }`;
