@@ -48,7 +48,6 @@ function getDOMElements() {
     boxColorPicker: document.getElementById("box"),
     boxColorText: document.getElementById("box-color"),
     shadowTypeToggle: document.getElementById("toggle"),
-    refreshButton: document.querySelector(".generator__refresh-button"),
     getCodeButton: document.querySelector(".generator__get-button"),
     closeCodeButton: document.querySelector(".generator__close-button"),
     copyButton: document.querySelector(".generator__copy-button"),
@@ -99,11 +98,10 @@ function setupEventListeners(elements) {
   setupColorSync(elements.shadowColorPicker, elements.shadowColorText);
   setupColorSync(elements.backgroundColorPicker, elements.backgroundColorText);
   setupColorSync(elements.boxColorPicker, elements.boxColorText);
-  elements.refreshButton.addEventListener("click", () => resetToDefaultButton(elements));
   elements.getCodeButton.addEventListener("click", () => showCodePreview(elements));
   elements.closeCodeButton.addEventListener("click", () => hideCodePreview(elements));
   elements.copyButton.addEventListener("click", () => copyCodeToClipboard(elements));
-  const updateTriggers = [
+  const updateValues = [
     elements.horizontalInput,
     elements.horizontalRange,
     elements.verticalInput,
@@ -118,9 +116,11 @@ function setupEventListeners(elements) {
     elements.shadowColorText,
     elements.boxColorPicker,
     elements.boxColorText,
-    elements.shadowTypeToggle
+    elements.shadowTypeToggle,
+    elements.backgroundColorPicker,
+    elements.backgroundColorText
   ];
-  updateTriggers.forEach((element) => {
+  updateValues.forEach((element) => {
     element.addEventListener("input", () => updateShadowPreview(elements));
   });
 }
@@ -159,45 +159,12 @@ function hideCodePreview(elements) {
 async function copyCodeToClipboard(elements) {
   const code = elements.codeContent.textContent;
   const buttonTextElement = elements.copyButton.querySelector(".generator__copy-button-text");
-  const originalText = buttonTextElement.textContent;
   try {
     await navigator.clipboard.writeText(code);
     buttonTextElement.textContent = "Copied!";
-    const startTime = performance.now();
-    const duration = 2e3;
-    const animateReturn = (currentTime) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      if (progress < 1) {
-        requestAnimationFrame(animateReturn);
-      } else {
-        buttonTextElement.textContent = originalText;
-      }
-    };
-    requestAnimationFrame(animateReturn);
   } catch {
     throw new Error("Failed to copy CSS code");
   }
-}
-function resetToDefaultButton(elements) {
-  elements.horizontalInput.value = 5;
-  elements.horizontalRange.value = 5;
-  elements.verticalInput.value = 5;
-  elements.verticalRange.value = 5;
-  elements.blurInput.value = 75;
-  elements.blurRange.value = 75;
-  elements.spreadInput.value = 0;
-  elements.spreadRange.value = 0;
-  elements.opacityInput.value = 0.3;
-  elements.opacityRange.value = 0.3;
-  elements.shadowColorPicker.value = "#000000";
-  elements.shadowColorText.value = "#000000";
-  elements.backgroundColorPicker.value = "#ffffff";
-  elements.backgroundColorText.value = "#ffffff";
-  elements.boxColorPicker.value = "#f3a712";
-  elements.boxColorText.value = "#f3a712";
-  elements.shadowTypeToggle.checked = false;
-  updateShadowPreview(elements);
 }
 
 // source/scripts/main.js
