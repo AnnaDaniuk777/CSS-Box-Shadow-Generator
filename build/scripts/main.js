@@ -30,23 +30,19 @@ function initShadowGenerator() {
   updateShadowPreview(elements);
 }
 function getDOMElements() {
+  const sizeWrappers = document.querySelectorAll(".generator__input-size");
+  const colorWrappers = document.querySelectorAll(".generator__input-color");
   return {
-    horizontalInput: document.getElementById("horizontal"),
-    horizontalRange: document.getElementById("h-length"),
-    verticalInput: document.getElementById("vertical"),
-    verticalRange: document.getElementById("v-length"),
-    blurInput: document.getElementById("blur"),
-    blurRange: document.getElementById("blur-radius"),
-    spreadInput: document.getElementById("spread"),
-    spreadRange: document.getElementById("spread-radius"),
-    opacityInput: document.getElementById("opacity"),
-    opacityRange: document.getElementById("opacity-range"),
-    shadowColorPicker: document.getElementById("shadow"),
-    shadowColorText: document.getElementById("shadow-color"),
-    backgroundColorPicker: document.getElementById("background"),
-    backgroundColorText: document.getElementById("background-color"),
-    boxColorPicker: document.getElementById("box"),
-    boxColorText: document.getElementById("box-color"),
+    sizeControls: Array.from(sizeWrappers).map((wrapper) => ({
+      input: wrapper.querySelector('input[type="number"]'),
+      range: wrapper.querySelector('input[type="range"]'),
+      error: wrapper.querySelector(".generator__error")
+    })),
+    colorControls: Array.from(colorWrappers).map((wrapper) => ({
+      picker: wrapper.querySelector('input[type="color"]'),
+      text: wrapper.querySelector('input[type="text"]'),
+      error: wrapper.querySelector(".generator__error")
+    })),
     shadowTypeToggle: document.getElementById("toggle"),
     getCodeButton: document.querySelector(".generator__get-button"),
     closeCodeButton: document.querySelector(".generator__close-button"),
@@ -57,82 +53,52 @@ function getDOMElements() {
     codeContent: document.querySelector(".generator__code-content")
   };
 }
-function syncRangeAndNumber(range, number) {
-  range.value = number.value;
+function syncRangeAndNumber(control) {
+  control.range.value = control.input.value;
 }
-function syncColorInputs(picker, text) {
-  picker.value = text.value;
+function syncColorInputs(control) {
+  control.picker.value = control.text.value;
 }
 function setInitialValues(elements) {
-  syncRangeAndNumber(elements.horizontalRange, elements.horizontalInput);
-  syncRangeAndNumber(elements.verticalRange, elements.verticalInput);
-  syncRangeAndNumber(elements.blurRange, elements.blurInput);
-  syncRangeAndNumber(elements.spreadRange, elements.spreadInput);
-  syncRangeAndNumber(elements.opacityRange, elements.opacityInput);
-  syncColorInputs(elements.shadowColorPicker, elements.shadowColorText);
-  syncColorInputs(elements.backgroundColorPicker, elements.backgroundColorText);
-  syncColorInputs(elements.boxColorPicker, elements.boxColorText);
+  elements.sizeControls.forEach((control) => syncRangeAndNumber(control));
+  elements.colorControls.forEach((control) => syncColorInputs(control));
 }
-function setupRangeNumberSync(rangeElement, numberElement) {
-  rangeElement.addEventListener("input", () => {
-    numberElement.value = rangeElement.value;
+function setupRangeNumberSync(control, elements) {
+  control.range.addEventListener("input", () => {
+    control.input.value = control.range.value;
+    updateShadowPreview(elements);
   });
-  numberElement.addEventListener("input", () => {
-    rangeElement.value = numberElement.value;
+  control.input.addEventListener("input", () => {
+    control.range.value = control.input.value;
+    updateShadowPreview(elements);
   });
 }
-function setupColorSync(colorPicker, colorText) {
-  colorPicker.addEventListener("input", () => {
-    colorText.value = colorPicker.value;
+function setupColorSync(control, elements) {
+  control.picker.addEventListener("input", () => {
+    control.text.value = control.picker.value;
+    updateShadowPreview(elements);
   });
-  colorText.addEventListener("input", () => {
-    colorPicker.value = colorText.value;
+  control.text.addEventListener("input", () => {
+    control.picker.value = control.text.value;
+    updateShadowPreview(elements);
   });
 }
 function setupEventListeners(elements) {
-  setupRangeNumberSync(elements.horizontalRange, elements.horizontalInput);
-  setupRangeNumberSync(elements.verticalRange, elements.verticalInput);
-  setupRangeNumberSync(elements.blurRange, elements.blurInput);
-  setupRangeNumberSync(elements.spreadRange, elements.spreadInput);
-  setupRangeNumberSync(elements.opacityRange, elements.opacityInput);
-  setupColorSync(elements.shadowColorPicker, elements.shadowColorText);
-  setupColorSync(elements.backgroundColorPicker, elements.backgroundColorText);
-  setupColorSync(elements.boxColorPicker, elements.boxColorText);
+  elements.sizeControls.forEach((control) => setupRangeNumberSync(control, elements));
+  elements.colorControls.forEach((control) => setupColorSync(control, elements));
   elements.getCodeButton.addEventListener("click", () => showCodePreview(elements));
   elements.closeCodeButton.addEventListener("click", () => hideCodePreview(elements));
   elements.copyButton.addEventListener("click", () => copyCodeToClipboard(elements));
-  const updateValues = [
-    elements.horizontalInput,
-    elements.horizontalRange,
-    elements.verticalInput,
-    elements.verticalRange,
-    elements.blurInput,
-    elements.blurRange,
-    elements.spreadInput,
-    elements.spreadRange,
-    elements.opacityInput,
-    elements.opacityRange,
-    elements.shadowColorPicker,
-    elements.shadowColorText,
-    elements.boxColorPicker,
-    elements.boxColorText,
-    elements.shadowTypeToggle,
-    elements.backgroundColorPicker,
-    elements.backgroundColorText
-  ];
-  updateValues.forEach((element) => {
-    element.addEventListener("input", () => updateShadowPreview(elements));
-  });
 }
 function updateShadowPreview(elements) {
-  const horizontal = elements.horizontalInput.value;
-  const vertical = elements.verticalInput.value;
-  const blur = elements.blurInput.value;
-  const spread = elements.spreadInput.value;
-  const shadowColor = elements.shadowColorPicker.value;
-  const boxColor = elements.boxColorPicker.value;
-  const backgroundColor = elements.backgroundColorPicker.value;
-  const opacity = elements.opacityInput.value;
+  const horizontal = document.getElementById("horizontal").value;
+  const vertical = document.getElementById("vertical").value;
+  const blur = document.getElementById("blur").value;
+  const spread = document.getElementById("spread").value;
+  const opacity = document.getElementById("opacity").value;
+  const shadowColor = document.getElementById("shadow").value;
+  const backgroundColor = document.getElementById("background").value;
+  const boxColor = document.getElementById("box").value.toUpperCase();
   const shadowType = elements.shadowTypeToggle.checked ? "inset" : "outline";
   elements.shadowBox.style.backgroundColor = backgroundColor;
   elements.boxView.style.backgroundColor = boxColor;
@@ -141,13 +107,13 @@ function updateShadowPreview(elements) {
   elements.boxView.style.boxShadow = shadowValue;
 }
 function showCodePreview(elements) {
-  const horizontal = elements.horizontalInput.value;
-  const vertical = elements.verticalInput.value;
-  const blur = elements.blurInput.value;
-  const spread = elements.spreadInput.value;
-  const shadowColor = elements.shadowColorPicker.value;
-  const boxColor = elements.boxColorPicker.value.toUpperCase();
-  const opacity = elements.opacityInput.value;
+  const horizontal = document.getElementById("horizontal").value;
+  const vertical = document.getElementById("vertical").value;
+  const blur = document.getElementById("blur").value;
+  const spread = document.getElementById("spread").value;
+  const opacity = document.getElementById("opacity").value;
+  const shadowColor = document.getElementById("shadow").value;
+  const boxColor = document.getElementById("box").value.toUpperCase();
   const shadowType = elements.shadowTypeToggle.checked ? "inset" : "outline";
   const cssCode = generateCSSCode(horizontal, vertical, blur, spread, shadowColor, boxColor, opacity, shadowType);
   elements.codeContent.textContent = cssCode;

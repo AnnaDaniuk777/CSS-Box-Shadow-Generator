@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="favicons/192.png">
   <link rel="icon" href="favicons/icon.png">
   <link rel="icon" href="favicon.ico">
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="../manifest.webmanifest">
   <link rel="stylesheet" href="styles/styles.css">
   <title>CSS Box Shadow Generator</title>
 </head>
@@ -33,6 +33,7 @@
                     <label class="generator__label" for="horizontal">Horizontal Length</label>
                     <input class="generator__input-number input" name="number" type="number" id="horizontal" value="5">
                     <span class="generator__input-text">px</span>
+                    <span class="generator__error" id="horizontal-error"></span>
                   </div>
                   <label class="visually-hidden" for="h-length"></label>
                   <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="h-length" value="5">
@@ -42,6 +43,7 @@
                     <label class="generator__label" for="vertical">Vertical Length</label>
                     <input class="generator__input-number input" name="number" type="number" id="vertical" value="5">
                     <span class="generator__input-text">px</span>
+                    <span class="generator__error" id="vertical-error"></span>
                   </div>
                   <label class="visually-hidden" for="v-length"></label>
                   <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="v-length" value="5">
@@ -51,6 +53,7 @@
                     <label class="generator__label" for="blur">Blur Radius</label>
                     <input class="generator__input-number input" name="number" type="number" id="blur" value="75">
                     <span class="generator__input-text">px</span>
+                    <span class="generator__error" id="blur-error"></span>
                   </div>
                   <label class="visually-hidden" for="blur-radius"></label>
                   <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="blur-radius" value="75">
@@ -60,6 +63,7 @@
                     <label class="generator__label" for="spread">Spread Radius</label>
                     <input class="generator__input-number input" name="number" type="number" id="spread" value="0">
                     <span class="generator__input-text">px</span>
+                    <span class="generator__error" id="spread-error"></span>
                   </div>
                   <label class="visually-hidden" for="spread-radius"></label>
                   <input class="generator__range" name="range" type="range" step="1" min="0" max="100" id="spread-radius" value="0">
@@ -72,6 +76,7 @@
                     <input class="generator__color-picker" name="color" type="color" id="shadow" value="#000000">
                     <label class="visually-hidden" for="shadow-color"></label>
                     <input class="generator__color-result input" name="text" type="text" id="shadow-color" value="#000000">
+                    <span class="generator__error" id="shadow-error"></span>
                   </div>
                 </div>
                 <div class="generator__input-color">
@@ -80,6 +85,7 @@
                     <input class="generator__color-picker" name="color" type="color" id="background" value="#ffffff">
                     <label class="visually-hidden" for="background-color"></label>
                     <input class="generator__color-result input" name="text" type="text" id="background-color" value="#ffffff">
+                    <span class="generator__error" id="background-error"></span>
                   </div>
                 </div>
                 <div class="generator__input-color">
@@ -88,17 +94,19 @@
                     <input class="generator__color-picker" name="color" type="color" id="box" value="#f3a712">
                     <label class="visually-hidden" for="box-color"></label>
                     <input class="generator__color-result input" name="text" type="text" id="box-color" value="#f3a712">
+                    <span class="generator__error" id="box-error"></span>
                   </div>
                 </div>
                 <div class="generator__input-size">
                   <div class="generator__input-wrapper">
                     <label class="generator__label" for="opacity">Opacity</label>
                     <input class="generator__input-number input" name="number" type="number" id="opacity" value="0.3">
+                    <span class="generator__error" id="opacity-error"></span>
                   </div>
                   <label class="visually-hidden" for="opacity-range"></label>
                   <input class="generator__range" name="range" type="range" step="0.1" min="0" max="1" id="opacity-range" value="0.3">
                 </div>
-                <div class="generator__input-color">
+                <div class="generator__input-toggle">
                   <label class="generator__label" for="toggle">
                     Outline
                     <input class="visually-hidden" name="toggle" type="checkbox" id="toggle">
