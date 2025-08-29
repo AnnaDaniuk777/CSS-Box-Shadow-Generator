@@ -22,6 +22,83 @@ function generateCSSCode(horizontal, vertical, blur, spread, shadowColor, boxCol
   return cssCode;
 }
 
+// source/scripts/modules/form-validator.js
+function validateNumberInput(input, min, max, errorElement, fieldName) {
+  const value = parseFloat(input.value);
+  let isValid = true;
+  let errorMessage = "";
+  if (input.value.trim() === "") {
+    isValid = false;
+    errorMessage = `${fieldName} is required`;
+  } else if (isNaN(value)) {
+    isValid = false;
+    errorMessage = `${fieldName} must be a number`;
+  } else if (value < min) {
+    isValid = false;
+    errorMessage = `${fieldName} must be at least ${min}`;
+  } else if (value > max) {
+    isValid = false;
+    errorMessage = `${fieldName} must be at most ${max}`;
+  }
+  if (errorElement) {
+    errorElement.textContent = errorMessage;
+    input.parentElement.classList.toggle("generator__input-wrapper--error", !isValid);
+  }
+  return isValid;
+}
+function validateColorInput(textInput, errorElement, fieldName) {
+  const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+  let isValid = true;
+  let errorMessage = "";
+  if (!textInput.value.trim()) {
+    isValid = false;
+    errorMessage = `${fieldName} is required`;
+  } else if (!hexColorRegex.test(textInput.value)) {
+    isValid = false;
+    errorMessage = `${fieldName} must be a valid hex color (e.g., #FF0000)`;
+  }
+  if (errorElement) {
+    errorElement.textContent = errorMessage;
+    textInput.parentElement.classList.toggle(".generator__general-color-wrapper--error", !isValid);
+  }
+  return isValid;
+}
+function validateOpacityInput(input, errorElement) {
+  const value = parseFloat(input.value);
+  let isValid = true;
+  let errorMessage = "";
+  if (input.value.trim() === "") {
+    isValid = false;
+    errorMessage = "Opacity is required";
+  } else if (isNaN(value)) {
+    isValid = false;
+    errorMessage = "Opacity must be a number";
+  } else if (value < 0) {
+    isValid = false;
+    errorMessage = "Opacity must be at least 0";
+  } else if (value > 1) {
+    isValid = false;
+    errorMessage = "Opacity must be at most 1";
+  }
+  if (errorElement) {
+    errorElement.textContent = errorMessage;
+    input.parentElement.classList.toggle(".generator__input-wrapper--error", !isValid);
+  }
+  return isValid;
+}
+function validateFormField(fieldType, input, errorElement, fieldName, min, max) {
+  switch (fieldType) {
+    case "number":
+      return validateNumberInput(input, min, max, errorElement, fieldName);
+    case "color":
+      return validateColorInput(input, errorElement, fieldName);
+    case "opacity":
+      return validateOpacityInput(input, errorElement);
+    default:
+      return true;
+  }
+}
+
 // source/scripts/modules/shadow-generator.js
 function initShadowGenerator() {
   const elements = getDOMElements();
@@ -63,30 +140,85 @@ function setInitialValues(elements) {
   elements.sizeControls.forEach((control) => syncRangeAndNumber(control));
   elements.colorControls.forEach((control) => syncColorInputs(control));
 }
-function setupRangeNumberSync(control, elements) {
+function setupRangeNumberSync(control, elements, index) {
+  const fieldConfigs = [
+    { type: "number", name: "Horizontal Length", min: 0, max: 100 },
+    { type: "number", name: "Vertical Length", min: 0, max: 100 },
+    { type: "number", name: "Blur Radius", min: 0, max: 100 },
+    { type: "number", name: "Spread Radius", min: 0, max: 100 },
+    { type: "opacity", name: "Opacity" }
+  ];
+  const config = fieldConfigs[index];
   control.range.addEventListener("input", () => {
     control.input.value = control.range.value;
+    validateFormField(config.type, control.input, control.error, config.name, config.min, config.max);
     updateShadowPreview(elements);
   });
   control.input.addEventListener("input", () => {
     control.range.value = control.input.value;
+    validateFormField(config.type, control.input, control.error, config.name, config.min, config.max);
     updateShadowPreview(elements);
   });
 }
-function setupColorSync(control, elements) {
+function setupColorSync(control, elements, index) {
+  const fieldNames = ["Shadow Color", "Background Color", "Box Color"];
   control.picker.addEventListener("input", () => {
     control.text.value = control.picker.value;
+    validateFormField("color", control.text, control.error, fieldNames[index]);
     updateShadowPreview(elements);
   });
   control.text.addEventListener("input", () => {
     control.picker.value = control.text.value;
+    validateFormField("color", control.text, control.error, fieldNames[index]);
     updateShadowPreview(elements);
   });
 }
+function validateAllFields(elements) {
+  let isValid = true;
+  const sizeFieldConfigs = [
+    { type: "number", name: "Horizontal Length", min: 0, max: 100 },
+    { type: "number", name: "Vertical Length", min: 0, max: 100 },
+    { type: "number", name: "Blur Radius", min: 0, max: 100 },
+    { type: "number", name: "Spread Radius", min: 0, max: 100 },
+    { type: "opacity", name: "Opacity" }
+  ];
+  const colorFieldNames = ["Shadow Color", "Background Color", "Box Color"];
+  elements.sizeControls.forEach((control, index) => {
+    const config = sizeFieldConfigs[index];
+    const fieldValid = validateFormField(
+      config.type,
+      control.input,
+      control.error,
+      config.name,
+      config.min,
+      config.max
+    );
+    if (!fieldValid) {
+      isValid = false;
+    }
+  });
+  elements.colorControls.forEach((control, index) => {
+    const fieldValid = validateFormField(
+      "color",
+      control.text,
+      control.error,
+      colorFieldNames[index]
+    );
+    if (!fieldValid) {
+      isValid = false;
+    }
+  });
+  return isValid;
+}
 function setupEventListeners(elements) {
-  elements.sizeControls.forEach((control) => setupRangeNumberSync(control, elements));
-  elements.colorControls.forEach((control) => setupColorSync(control, elements));
-  elements.getCodeButton.addEventListener("click", () => showCodePreview(elements));
+  elements.sizeControls.forEach((control, index) => setupRangeNumberSync(control, elements, index));
+  elements.colorControls.forEach((control, index) => setupColorSync(control, elements, index));
+  elements.getCodeButton.addEventListener("click", () => {
+    if (validateAllFields(elements)) {
+      showCodePreview(elements);
+    }
+  });
+  elements.shadowTypeToggle.addEventListener("change", () => updateShadowPreview(elements));
   elements.closeCodeButton.addEventListener("click", () => hideCodePreview(elements));
   elements.copyButton.addEventListener("click", () => copyCodeToClipboard(elements));
 }
@@ -128,7 +260,11 @@ async function copyCodeToClipboard(elements) {
   try {
     await navigator.clipboard.writeText(code);
     buttonTextElement.textContent = "Copied!";
+    setTimeout(() => {
+      buttonTextElement.textContent = "Copy to Clipboard";
+    }, 2e3);
   } catch {
+    buttonTextElement.textContent = "Copy Failed!";
     throw new Error("Failed to copy CSS code");
   }
 }

@@ -1,4 +1,4 @@
-export function validateNumberInput(input, min, max, errorElement, fieldName) {
+function validateNumberInput(input, min, max, errorElement, fieldName) {
   const value = parseFloat(input.value);
   let isValid = true;
   let errorMessage = '';
@@ -25,7 +25,7 @@ export function validateNumberInput(input, min, max, errorElement, fieldName) {
   return isValid;
 }
 
-export function validateColorInput(textInput, errorElement, fieldName) {
+function validateColorInput(textInput, errorElement, fieldName) {
   const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
   let isValid = true;
   let errorMessage = '';
@@ -46,7 +46,7 @@ export function validateColorInput(textInput, errorElement, fieldName) {
   return isValid;
 }
 
-export function validateOpacityInput(input, errorElement) {
+function validateOpacityInput(input, errorElement) {
   const value = parseFloat(input.value);
   let isValid = true;
   let errorMessage = '';
@@ -73,55 +73,15 @@ export function validateOpacityInput(input, errorElement) {
   return isValid;
 }
 
-export function validateAllFields(elements) {
-  let isValid = true;
-
-  const fieldNames = ['Horizontal Length', 'Vertical Length', 'Blur Radius', 'Spread Radius', 'Opacity'];
-  const limits = [
-    {min: 0, max: 100},
-    {min: 0, max: 100},
-    {min: 0, max: 100},
-    {min: 0, max: 100},
-    {min: 0, max: 1}
-  ];
-
-  elements.sizeControls.forEach((control, index) => {
-    let fieldValid;
-
-    if (index === 4) {
-      fieldValid = validateOpacityInput(control.input, control.error);
-    } else {
-      fieldValid = validateOpacityInput(
-        control.input,
-        limits[index].min,
-        limits[index].max,
-        control.error,
-        fieldNames[index]
-      );
-    }
-
-    if (!fieldValid) {
-      isValid = false;
-    }
-  });
-
-  const colorWrappers = document.querySelectorAll('.generator__input-color');
-
-  // const colorControls = Array.from(colorWrappers).map((wrapper) => ({
-  //   picker: wrapper.querySelector('input[type="color"]'),
-  //   text: wrapper.querySelector('input[type="text"]')
-  // }));
-
-
-  const colorFieldsNames = ['Shadow Color', 'Background Color', 'Box Color'];
-
-  elements.colorControls.forEach((control, index) => {
-    const fieldValid = validateColorInput(control.text, control.error, colorFieldsNames[index]);
-
-    if (!fieldValid) {
-      isValid = false;
-    }
-  });
-
-  return isValid;
+export function validateFormField(fieldType, input, errorElement, fieldName, min, max) {
+  switch (fieldType) {
+    case 'number':
+      return validateNumberInput(input, min, max, errorElement, fieldName);
+    case 'color':
+      return validateColorInput(input, errorElement, fieldName);
+    case 'opacity':
+      return validateOpacityInput(input, errorElement);
+    default:
+      return true;
+  }
 }

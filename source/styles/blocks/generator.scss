@@ -1,6 +1,6 @@
 .generator__result-wrapper {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 760px 660px;
 }
 
 .generator__title-wrapper {
@@ -19,14 +19,14 @@
 }
 
 .generator__input-result {
-  max-width: 960px;
+  max-width: 760px;
   min-width: 384px;
   padding: 20px 30px 60px 20px;
   background-color: $background-color-generator;
 }
 
 .generator__shadow-box {
-  max-width: 960px;
+  max-width: 660px;
   min-width: 384px;
   padding: 50px;
   display: flex;
@@ -286,4 +286,10 @@
 .generator__input-wrapper--error .generator__error,
 .generator__general-color-wrapper--error .generator__error {
   display: block;
+  position: absolute;
+  top: -38px;
+  right: 0;
+  background: $background-color-main;
+  padding: 0 10px;
+  border-radius: 5px;
 }

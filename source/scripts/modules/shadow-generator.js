@@ -1,6 +1,6 @@
 import { hexToRgba } from './color-converter.js';
 import { generateCSSCode } from './code-generator.js';
-import { validateNumberInput, validateColorInput, validateOpacityInput, validateAllFields } from './form-validator.js';
+import { validateFormField } from './form-validator.js';
 
 export function initShadowGenerator() {
   const elements = getDOMElements();
@@ -13,10 +13,6 @@ export function initShadowGenerator() {
 function getDOMElements() {
   const sizeWrappers = document.querySelectorAll('.generator__input-size');
   const colorWrappers = document.querySelectorAll('.generator__input-color');
-
-  // const validColorWrappers = Array.from(colorWrappers).filter((wrapper) =>
-  //   wrapper.querySelector('input[type="color"]') && wrapper.querySelector('input[type="text"]')
-  // );
 
   return {
     sizeControls: Array.from(sizeWrappers).map((wrapper) => ({
@@ -55,35 +51,100 @@ function setInitialValues(elements) {
   elements.colorControls.forEach((control) => syncColorInputs(control));
 }
 
-function setupRangeNumberSync(control, elements) {
+function setupRangeNumberSync(control, elements, index) {
+  const fieldConfigs = [
+    { type: 'number', name: 'Horizontal Length', min: 0, max: 100 },
+    { type: 'number', name: 'Vertical Length', min: 0, max: 100 },
+    { type: 'number', name: 'Blur Radius', min: 0, max: 100 },
+    { type: 'number', name: 'Spread Radius', min: 0, max: 100 },
+    { type: 'opacity', name: 'Opacity' }
+  ];
+
+  const config = fieldConfigs[index];
+
   control.range.addEventListener('input', () => {
     control.input.value = control.range.value;
+    validateFormField(config.type, control.input, control.error, config.name, config.min, config.max);
     updateShadowPreview(elements);
   });
 
   control.input.addEventListener('input', () => {
     control.range.value = control.input.value;
+    validateFormField(config.type, control.input, control.error, config.name, config.min, config.max);
     updateShadowPreview(elements);
   });
 }
 
-function setupColorSync(control, elements) {
+function setupColorSync(control, elements, index) {
+  const fieldNames = ['Shadow Color', 'Background Color', 'Box Color'];
+
   control.picker.addEventListener('input', () => {
     control.text.value = control.picker.value;
+    validateFormField('color', control.text, control.error, fieldNames[index]);
     updateShadowPreview(elements);
   });
 
   control.text.addEventListener('input', () => {
     control.picker.value = control.text.value;
+    validateFormField('color', control.text, control.error, fieldNames[index]);
     updateShadowPreview(elements);
   });
 }
 
-function setupEventListeners(elements) {
-  elements.sizeControls.forEach((control) => setupRangeNumberSync(control, elements));
-  elements.colorControls.forEach((control) => setupColorSync(control, elements));
+function validateAllFields(elements) {
+  let isValid = true;
 
-  elements.getCodeButton.addEventListener('click', () => showCodePreview(elements));
+  const sizeFieldConfigs = [
+    { type: 'number', name: 'Horizontal Length', min: 0, max: 100 },
+    { type: 'number', name: 'Vertical Length', min: 0, max: 100 },
+    { type: 'number', name: 'Blur Radius', min: 0, max: 100 },
+    { type: 'number', name: 'Spread Radius', min: 0, max: 100 },
+    { type: 'opacity', name: 'Opacity' }
+  ];
+
+  const colorFieldNames = ['Shadow Color', 'Background Color', 'Box Color'];
+
+  elements.sizeControls.forEach((control, index) => {
+    const config = sizeFieldConfigs[index];
+    const fieldValid = validateFormField(
+      config.type,
+      control.input,
+      control.error,
+      config.name,
+      config.min,
+      config.max
+    );
+    if (!fieldValid) {
+      isValid = false;
+    }
+  });
+
+  elements.colorControls.forEach((control, index) => {
+    const fieldValid = validateFormField(
+      'color',
+      control.text,
+      control.error,
+      colorFieldNames[index]
+    );
+    if (!fieldValid) {
+      isValid = false;
+    }
+  });
+
+  return isValid;
+}
+
+function setupEventListeners(elements) {
+  elements.sizeControls.forEach((control, index) => setupRangeNumberSync(control, elements, index));
+  elements.colorControls.forEach((control, index) => setupColorSync(control, elements, index));
+
+  elements.getCodeButton.addEventListener('click', () => {
+    if (validateAllFields(elements)) {
+      showCodePreview(elements);
+    }
+  });
+
+  elements.shadowTypeToggle.addEventListener('change', () => updateShadowPreview(elements));
   elements.closeCodeButton.addEventListener('click', () => hideCodePreview(elements));
   elements.copyButton.addEventListener('click', () => copyCodeToClipboard(elements));
 }
@@ -135,7 +196,12 @@ async function copyCodeToClipboard(elements) {
   try {
     await navigator.clipboard.writeText(code);
     buttonTextElement.textContent = 'Copied!';
+
+    setTimeout(() => {
+      buttonTextElement.textContent = 'Copy to Clipboard';
+    }, 2000);
   } catch {
+    buttonTextElement.textContent = 'Copy Failed!';
     throw new Error('Failed to copy CSS code');
   }
 }
